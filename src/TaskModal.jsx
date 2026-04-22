@@ -5,6 +5,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 
+import { api } from "./api";
 const API = window.location.port === "5173" ? "http://localhost:4000" : window.location.origin;
 
 export default function TaskModal({ task, onClose, onUpdate }) {
@@ -70,12 +71,7 @@ export default function TaskModal({ task, onClose, onUpdate }) {
 
   const save = useCallback(
     async (html) => {
-      const res = await fetch(`${API}/tasks/${task.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description: html }),
-      });
-      const updated = await res.json();
+      const updated = await api(`/tasks/${task.id}`, { method: "PATCH", body: JSON.stringify({ description: html }) });
       onUpdate(updated);
     },
     [task.id, onUpdate]
