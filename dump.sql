@@ -1,3 +1,14 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  email VARCHAR(255) NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role ENUM('admin','user') DEFAULT 'user',
+  totp_secret VARCHAR(64) NULL,
+  totp_enabled BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -14,6 +25,19 @@ CREATE TABLE IF NOT EXISTS tasks (
   position INT DEFAULT 0,
   description LONGTEXT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS settings (
+  `key` VARCHAR(100) PRIMARY KEY,
+  `value` TEXT
+);
+
+CREATE TABLE IF NOT EXISTS project_followers (
+  user_id INT NOT NULL,
+  project_id INT NOT NULL,
+  PRIMARY KEY (user_id, project_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
