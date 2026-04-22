@@ -123,42 +123,42 @@ taskyboi/
 
 ## 📋 TaskyBoi (Türkçe)
 
-Kimlik doğrulama, 2FA, e-posta bildirimleri ve proje takibi olan hafif, gerçek zamanlı ekip görev takip uygulaması.
+Giriş sistemi, iki faktörlü doğrulama, e-posta bildirimleri ve proje takibi içeren hafif, gerçek zamanlı bir ekip görev yönetim uygulaması.
 
 ### ✨ Özellikler
 
-- **Kimlik doğrulama** — JWT tabanlı giriş sistemi (7 günlük oturum)
-- **Admin paneli** — Admin kullanıcı ekler/siler, rol atar
-- **İki Faktörlü Doğrulama (2FA)** — Google Authenticator / Authy ile TOTP; QR kod + tarayamayanlar için manuel gizli anahtar
-- **Profil ayarları** — Şifre değiştir, e-posta güncelle, 2FA aç/kapat
-- **Projeler** — Başlık, irtibat kişileri ve notlarla proje oluştur
-- **Görevler** — Task ekle, tamamla, sil; tamamlananlar altta ayrı grupta
-- **Zengin metin açıklamaları** — Her task için tam TipTap editörü: kalın, italik, başlıklar, listeler, kod blokları, linkler, görseller (panodan yapıştır, sürükle bırak, URL)
-- **Gerçek zamanlı senkronizasyon** — Socket.io ile değişiklikler anında herkese yansır
-- **Proje takibi** — Projeyi takip et/bırak, bildirim al
-- **E-posta bildirimleri** — Takip edilen projede yeni task eklenince veya task tamamlanınca mail gelir
-- **Sistem ayarları** — Admin SMTP bilgilerini UI'dan girer; test gönderme butonu var
-- **Karanlık mod** — Tek tıkla geçiş, tercih tarayıcıda saklanır
-- **İlerleme çubuğu** — Her proje kartında tamamlanma yüzdesi
-- **Docker hazır** — Tek komutla her şey ayağa kalkar
+- **Kimlik doğrulama** — JWT tabanlı giriş sistemi; oturumlar 7 gün geçerli
+- **Yönetici paneli** — Yönetici kullanıcı ekler, siler ve rol atar
+- **İki Faktörlü Doğrulama (2FA)** — Google Authenticator veya Authy ile TOTP desteği; QR kod okutamayanlara özel manuel gizli anahtar gösterimi
+- **Profil ayarları** — Şifre değiştirme, e-posta güncelleme, 2FA etkinleştirme/devre dışı bırakma
+- **Projeler** — Başlık, irtibat kişileri ve notlarla proje oluşturma ve düzenleme
+- **Görevler** — Görev ekleme, tamamlama ve silme; tamamlanan görevler sayfanın altında ayrı grupta listelenir
+- **Zengin metin açıklamaları** — Her göreve özel tam özellikli metin editörü: kalın, italik, başlıklar, madde listeleri, kod blokları, bağlantı ve görsel ekleme (panodan yapıştırma, sürükle bırak veya URL ile)
+- **Gerçek zamanlı eşitleme** — Yapılan değişiklikler WebSocket aracılığıyla anında tüm kullanıcılara yansır
+- **Proje takibi** — İstediğiniz projeyi takibe alın ya da takipten çıkın
+- **E-posta bildirimleri** — Takip ettiğiniz projede yeni görev eklendiğinde veya bir görev tamamlandığında e-posta bildirimi alın
+- **Sistem ayarları** — Yönetici, SMTP bilgilerini arayüzden girer; bağlantıyı test etmek için test gönderme butonu mevcuttur
+- **Karanlık mod** — Tek tıkla aydınlık/karanlık geçişi; tercih tarayıcıda saklanır
+- **İlerleme çubuğu** — Her proje kartında tamamlanma yüzdesi görsel olarak gösterilir
+- **Docker desteği** — Tek komutla tüm uygulama ayağa kalkar
 
-### 🔐 Varsayılan Admin Bilgileri
+### 🔐 Varsayılan Yönetici Bilgileri
 
 ```
 Kullanıcı Adı : TaskyBoi
 Şifre         : admin123
 ```
 
-> ⚠️ İlk girişten sonra hemen şifreyi değiştirin: **👤 Profil → 🔑 Şifre**.
+> ⚠️ İlk girişten sonra şifrenizi hemen değiştirin: **👤 Profil → 🔑 Şifre**
 
 ### 🛠 Kullanılan Teknolojiler
 
 | Katman | Teknoloji |
 |---|---|
-| Frontend | React 18, Vite |
+| Arayüz | React 18, Vite |
 | Zengin Metin Editörü | TipTap |
-| Gerçek Zamanlı | Socket.io |
-| Backend | Node.js, Express |
+| Gerçek Zamanlı İletişim | Socket.io |
+| Sunucu | Node.js, Express |
 | Kimlik Doğrulama | JWT, bcryptjs |
 | İki Faktörlü Doğrulama | speakeasy (TOTP), qrcode |
 | E-posta | Nodemailer |
@@ -167,42 +167,76 @@ Kullanıcı Adı : TaskyBoi
 
 ### 🚀 Kurulum
 
+**Gereksinim:** Docker ve Docker Compose kurulu olmalıdır.
+
 ```bash
 # 1. Repoyu klonla
 git clone https://github.com/sonerce/taskyboi.git
 cd taskyboi
 
-# 2. (İsteğe bağlı) DB şifresi ve JWT secret belirle
+# 2. İsteğe bağlı: veritabanı şifresi ve JWT anahtarı belirle
 cp .env.example .env
 nano .env
 
-# 3. Başlat
+# 3. Uygulamayı başlat
 docker compose up -d
 
 # 4. Tarayıcıda aç
 http://localhost:4000
 
-# Giriş: TaskyBoi / admin123
+# Giriş bilgileri: TaskyBoi / admin123
 ```
 
 ### 🌍 Ekiple Paylaşım
 
-**Aynı ağda** → `http://LOKAL_IP:4000`
+**Aynı ağdaysanız (ofis veya ev Wi-Fi)**
+```
+http://YEREL_IP_ADRESINIZ:4000
+```
 
-**İnternetten (ngrok)** → `ngrok http 4000`
+**Farklı konumdaki kişilerle (ngrok)**
+```bash
+ngrok http 4000
+# Oluşan https://xxx.ngrok-free.app adresini paylaşın
+```
 
-**VPS** → Docker kurulu sunucuya kopyala, `docker compose up -d`
+**Sunucuya kurulum (VPS)**
+Projeyi Docker kurulu herhangi bir Linux sunucusuna yükleyin, `docker compose up -d` komutunu çalıştırın ve alan adınızı 4000 portuna yönlendirin.
 
 ### 📧 E-posta Bildirimi Kurulumu
 
-1. Admin olarak giriş → **⚙️ Ayarlar** → SMTP bilgilerini doldur → **Test Et**
-2. Her kullanıcı → **👤 Profil → 📧 E-posta** → adresini kaydet
-3. Proje detayında **🔔 Takip et** butonuna bas
+1. Yönetici olarak giriş yapın → **⚙️ Ayarlar** → SMTP bilgilerini doldurun → **Test Et** ile doğrulayın
+2. Her kullanıcı kendi profilinden **👤 Profil → 📧 E-posta** sekmesine giderek adresini kaydeder
+3. Bildirim almak istediği projenin detay sayfasında **🔔 Takip et** butonuna basar
 
-> Gmail için normal şifre yerine **App Password** kullanın.
+> Gmail kullanıyorsanız normal şifre yerine **Uygulama Şifresi (App Password)** oluşturmanız gerekir.
+> Google Hesabı → Güvenlik → 2 Adımlı Doğrulama → Uygulama şifreleri
+
+### 📁 Proje Yapısı
+
+```
+taskyboi/
+├── backend/
+│   ├── server.js          # Express + Socket.io API, kimlik doğrulama, 2FA, e-posta
+│   ├── package.json
+│   └── Dockerfile
+├── src/
+│   ├── App.jsx            # Ana uygulama ve sayfa yönlendirme
+│   ├── Login.jsx          # Giriş ekranı (2FA adımı dahil)
+│   ├── ProfileModal.jsx   # Şifre, e-posta ve 2FA ayarları
+│   ├── AdminPanel.jsx     # Kullanıcı yönetimi (sadece yönetici)
+│   ├── SettingsPanel.jsx  # SMTP sistem ayarları (sadece yönetici)
+│   ├── TaskModal.jsx      # Zengin metin görev detay modalı
+│   ├── ProjectModal.jsx   # Proje oluşturma/düzenleme modalı
+│   ├── api.js             # JWT destekli istek yardımcısı
+│   └── index.css          # Genel stiller ve karanlık mod değişkenleri
+├── dump.sql               # Veritabanı şeması ve örnek veriler
+├── docker-compose.yml
+└── .env.example
+```
 
 ---
 
-## License
+## Lisans
 
 MIT
