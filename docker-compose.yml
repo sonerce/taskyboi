@@ -1,0 +1,33 @@
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-taskyboi}
+      MYSQL_DATABASE: taskyboi
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${DB_PASS:-taskyboi}"]
+      interval: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASS: ${DB_PASS:-taskyboi}
+      DB_NAME: taskyboi
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
